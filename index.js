@@ -1,10 +1,28 @@
+const snekfetch = require("snekfetch");
+const config = require("./config.json");
+
+let number = 100;
 let activeBotIndex = 0; // Indeks bot yang aktif mengirim pesan
-const bots = []; // Simpan daftar bot yang sudah dibuat
-const botSpamCounts = {}; // Melacak jumlah pesan yang dikirim tiap bot
-const maxSpamCount = 15; // Jumlah pesan sebelum bot di-kick
+const bots = []; // Daftar bot aktif
+const botSpamCounts = {}; // Melacak jumlah pesan tiap bot
+const maxSpamCount = config.maxSpamCount || 15; // Default jumlah pesan sebelum bot di-kick
+
+setInterval(() => {
+    number += 1;
+
+    if (config.altening === true) {
+        snekfetch
+            .get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`)
+            .then(n => {
+                createBot(n.body.token);
+            });
+    } else {
+        createBot(config.crackedusernameprefix + number.toString());
+    }
+}, config.loginintervalms);
 
 function createBot(username) {
-    const mineflayer = require('mineflayer');
+    const mineflayer = require("mineflayer");
     const bot = mineflayer.createBot({
         host: config.ip,
         port: config.port,
@@ -38,14 +56,16 @@ function createBot(username) {
         }
     });
 
-    bot.on('login', () => {
+    bot.on("login", () => {
+        bot.chat(`/login ${config.loginpassword}`); // Login otomatis
+        bot.chat(`/register ${config.registerpassword} ${config.registerpassword}`); // Register otomatis
         bots.push(bot); // Tambahkan bot ke daftar
         botSpamCounts[bot.username] = 0; // Inisialisasi jumlah pesan bot
         console.log("Logged in " + bot.username);
     });
 
-    bot.on('error', err => console.log(err));
-    bot.on('kicked', reason => {
+    bot.on("error", err => console.log(err));
+    bot.on("kicked", reason => {
         console.log(`Bot ${username} kicked for reason: ${reason}`);
         removeBot(bot); // Hapus bot dari daftar jika di-kick
     });
@@ -56,7 +76,7 @@ setInterval(() => {
     if (bots.length > 0) {
         const activeBot = bots[activeBotIndex];
         if (activeBot && activeBot.player) {
-            activeBot.chat(config.spammessage); // Kirim pesan
+            activeBot.chat(config.spammessages[botSpamCounts[activeBot.username] % config.spammessages.length]); // Kirim pesan
             botSpamCounts[activeBot.username] += 1; // Tambah jumlah pesan bot
             console.log(`Bot ${activeBot.username} mengirimkan pesan ke-${botSpamCounts[activeBot.username]}.`);
 
