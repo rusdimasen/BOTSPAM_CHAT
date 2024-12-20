@@ -3,10 +3,11 @@ const config = require("./config.json");
 
 let number = 100;
 let activeBotIndex = 0; // Indeks bot yang aktif mengirim pesan
-const bots = []; // Daftar bot aktif
+const bots = []; // Daftar bot yang sudah dibuat
 const botSpamCounts = {}; // Melacak jumlah pesan tiap bot
-const maxSpamCount = config.maxSpamCount || 15; // Default jumlah pesan sebelum bot di-kick
+const maxSpamCount = config.maxSpamCount || 15; // Jumlah pesan sebelum bot di-kick
 
+// Membuat bot secara berkala
 setInterval(() => {
     number += 1;
 
@@ -21,6 +22,7 @@ setInterval(() => {
     }
 }, config.loginintervalms);
 
+// Fungsi untuk membuat bot
 function createBot(username) {
     const mineflayer = require("mineflayer");
     const bot = mineflayer.createBot({
@@ -57,10 +59,10 @@ function createBot(username) {
     });
 
     bot.on("login", () => {
-        bot.chat(`/login ${config.loginpassword}`); // Login otomatis
-        bot.chat(`/register ${config.registerpassword} ${config.registerpassword}`); // Register otomatis
+        bot.chat(`/login ${config.loginpassword}`); // Perintah login
+        bot.chat(`/register ${config.registerpassword} ${config.registerpassword}`); // Perintah register
         bots.push(bot); // Tambahkan bot ke daftar
-        botSpamCounts[bot.username] = 0; // Inisialisasi jumlah pesan bot
+        botSpamCounts[bot.username] = 0; // Inisialisasi jumlah pesan
         console.log("Logged in " + bot.username);
     });
 
@@ -71,23 +73,25 @@ function createBot(username) {
     });
 }
 
-// Interval untuk mengirim pesan bergantian antar bot
+// Interval global untuk mengirim pesan secara bergantian antar bot
 setInterval(() => {
     if (bots.length > 0) {
         const activeBot = bots[activeBotIndex];
         if (activeBot && activeBot.player) {
             activeBot.chat(config.spammessages[botSpamCounts[activeBot.username] % config.spammessages.length]); // Kirim pesan
-            botSpamCounts[activeBot.username] += 1; // Tambah jumlah pesan bot
-            console.log(`Bot ${activeBot.username} mengirimkan pesan ke-${botSpamCounts[activeBot.username]}.`);
+            botSpamCounts[activeBot.username] += 1; // Tambahkan jumlah pesan
+            console.log(`Bot ${activeBot.username} mengirim pesan ke-${botSpamCounts[activeBot.username]}.`);
 
-            // Kick bot jika jumlah pesan mencapai batas
+            // Kick bot jika mencapai batas pesan
             if (botSpamCounts[activeBot.username] >= maxSpamCount) {
                 console.log(`Bot ${activeBot.username} mencapai batas pesan (${maxSpamCount}) dan akan di-kick.`);
                 activeBot.end(); // Keluar dari server
                 removeBot(activeBot); // Hapus bot dari daftar
             }
         }
-        activeBotIndex = (activeBotIndex + 1) % bots.length; // Beralih ke bot berikutnya
+
+        // Pindah ke bot berikutnya
+        activeBotIndex = (activeBotIndex + 1) % bots.length;
     }
 }, config.spamintervalms);
 

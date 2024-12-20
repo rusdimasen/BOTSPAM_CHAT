@@ -6,10 +6,10 @@
     "loginintervalms": 1000,
     "altening": false,
     "altening_token": "",
-    "spammessages": "spam",
-    "spamintervalms": 1500,
+    "spammessages": ["Pesan 1", "Pesan 2", "Pesan 3"], // Daftar pesan
+    "spamintervalms": 1500,                            // Interval antar pesan
     "physics": false,
-    "maxSpamCount": 15,
-    "loginpassword": "p@ssword123",         
-    "registerpassword": "p@ssword123"      
+    "maxSpamCount": 15,                                // Jumlah pesan sebelum bot di-kick
+    "loginpassword": "p@ssword123",                    // Password login
+    "registerpassword": "p@ssword123"                  // Password register
 }
