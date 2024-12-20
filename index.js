@@ -1,30 +1,14 @@
 const snekfetch = require("snekfetch");
 const config = require("./config.json");
+let botNumber = 100; // Nomor awal bot
+const maxSpamPerBot = 10; // Maksimal jumlah spam per bot
+const password = config.password; // Ambil password dari config.json
 
-let number = 100;
-let activeBotIndex = 0; // Indeks bot yang aktif mengirim pesan
-const bots = []; // Daftar bot yang sudah dibuat
-const botSpamCounts = {}; // Melacak jumlah pesan tiap bot
-const maxSpamCount = config.maxSpamCount || 15; // Jumlah pesan sebelum bot di-kick
+// Fungsi untuk memulai bot
+const startBot = (botNumber) => {
+    const mineflayer = require('mineflayer');
+    const username = `${config.crackedusernameprefix}${botNumber}`;
 
-// Membuat bot secara berkala
-setInterval(() => {
-    number += 1;
-
-    if (config.altening === true) {
-        snekfetch
-            .get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`)
-            .then(n => {
-                createBot(n.body.token);
-            });
-    } else {
-        createBot(config.crackedusernameprefix + number.toString());
-    }
-}, config.loginintervalms);
-
-// Fungsi untuk membuat bot
-function createBot(username) {
-    const mineflayer = require("mineflayer");
     const bot = mineflayer.createBot({
         host: config.ip,
         port: config.port,
@@ -58,48 +42,61 @@ function createBot(username) {
         }
     });
 
-    bot.on("login", () => {
-        bot.chat(`/login ${config.loginpassword}`); // Perintah login
-        bot.chat(`/register ${config.registerpassword} ${config.registerpassword}`); // Perintah register
-        bots.push(bot); // Tambahkan bot ke daftar
-        botSpamCounts[bot.username] = 0; // Inisialisasi jumlah pesan
-        console.log("Logged in " + bot.username);
-    });
+    let spamCount = 0;
 
-    bot.on("error", err => console.log(err));
-    bot.on("kicked", reason => {
-        console.log(`Bot ${username} kicked for reason: ${reason}`);
-        removeBot(bot); // Hapus bot dari daftar jika di-kick
-    });
-}
+    bot.on('login', () => {
+        console.log(`Bot ${bot.username} logged in`);
 
-// Interval global untuk mengirim pesan secara bergantian antar bot
-setInterval(() => {
-    if (bots.length > 0) {
-        const activeBot = bots[activeBotIndex];
-        if (activeBot && activeBot.player) {
-            activeBot.chat(config.spammessages[botSpamCounts[activeBot.username] % config.spammessages.length]); // Kirim pesan
-            botSpamCounts[activeBot.username] += 1; // Tambahkan jumlah pesan
-            console.log(`Bot ${activeBot.username} mengirim pesan ke-${botSpamCounts[activeBot.username]}.`);
+        // Kirim perintah register atau login
+        setTimeout(() => {
+            bot.chat(`/register ${password} ${password}`); // Register
+            bot.chat(`/login ${password}`); // Login
+        }, 2000);
 
-            // Kick bot jika mencapai batas pesan
-            if (botSpamCounts[activeBot.username] >= maxSpamCount) {
-                console.log(`Bot ${activeBot.username} mencapai batas pesan (${maxSpamCount}) dan akan di-kick.`);
-                activeBot.end(); // Keluar dari server
-                removeBot(activeBot); // Hapus bot dari daftar
+        // Spam hingga 10 kali
+        const spamInterval = setInterval(() => {
+            if (spamCount < maxSpamPerBot) {
+                bot.chat(config.spammessage);
+                spamCount++;
+            } else {
+                clearInterval(spamInterval);
+                bot.end(); // Bot keluar setelah selesai spam
+                console.log(`Bot ${bot.username} finished spamming`);
+
+                // Pindah ke bot berikutnya
+                botNumber++;
+                startBot(botNumber); // Memulai bot berikutnya
             }
-        }
+        }, config.spamintervalms);
 
-        // Pindah ke bot berikutnya
-        activeBotIndex = (activeBotIndex + 1) % bots.length;
-    }
-}, config.spamintervalms);
+        // Fitur Jump setiap 5 detik
+        setInterval(() => {
+            bot.setControlState('jump', true);
+            setTimeout(() => {
+                bot.setControlState('jump', false);
+            }, 500);
+        }, 5000);
 
-// Fungsi untuk menghapus bot dari daftar
-function removeBot(bot) {
-    const index = bots.indexOf(bot);
-    if (index > -1) {
-        bots.splice(index, 1);
-        delete botSpamCounts[bot.username];
-    }
-}
+        // Fitur Move maju setiap 3 detik
+        setInterval(() => {
+            bot.setControlState('forward', true);
+            setTimeout(() => {
+                bot.setControlState('forward', false);
+            }, 2000);
+        }, 3000);
+    });
+
+    bot.on('error', (err) => {
+        console.log(`Bot ${bot.username} encountered an error:`, err);
+    });
+
+    bot.on('kicked', (reason) => {
+        console.log(`Bot ${bot.username} was kicked for:`, reason);
+        // Tetap coba bot berikutnya jika bot ini dikeluarkan
+        botNumber++;
+        startBot(botNumber);
+    });
+};
+
+// Mulai bot pertama
+startBot(botNumber);

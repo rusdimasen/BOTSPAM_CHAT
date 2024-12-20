@@ -1,15 +1,17 @@
 {
-    "crackedusernameprefix": "BOT",
-    "ip": "server.com",
-    "port": 25565,
-    "version": "1.12.2",
-    "loginintervalms": 1000,
-    "altening": false,
-    "altening_token": "",
-    "spammessages": ["Pesan 1", "Pesan 2", "Pesan 3"], // Daftar pesan
-    "spamintervalms": 1500,                            // Interval antar pesan
-    "physics": false,
-    "maxSpamCount": 15,                                // Jumlah pesan sebelum bot di-kick
-    "loginpassword": "p@ssword123",                    // Password login
-    "registerpassword": "p@ssword123"                  // Password register
+    "crackedusernameprefix": "BOT",       
+    "ip": "server.com",                  
+    "port": 25565,                       
+    "version": "1.12.2",                 
+
+    "loginintervalms": 1000,             
+    "spamintervalms": 1500,              
+    "spammessage": "spam",               
+
+    "altening": false,                   
+    "altening_token": "",                
+
+    "physics": false,                    
+
+    "password": "securePassword123"      
 }
