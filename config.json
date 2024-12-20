@@ -6,8 +6,10 @@
     "loginintervalms": 1000,
     "altening": false,
     "altening_token": "",
-    "spammessage": "Pesan bergantian antar bot",
+    "spammessages": "spam",
     "spamintervalms": 1500,
     "physics": false,
-    "maxSpamCount": 15 
+    "maxSpamCount": 15,
+    "loginpassword": "p@ssword123",         
+    "registerpassword": "p@ssword123"      
 }
