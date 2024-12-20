@@ -1,0 +1,13 @@
+{
+    "crackedusernameprefix": "BOT",
+    "ip": "server.com",
+    "port": 25565,
+    "version": "1.12.2",
+    "loginintervalms": 1000,
+    "altening": false,
+    "altening_token": "",
+    "spammessage": "Pesan bergantian antar bot",
+    "spamintervalms": 1500,
+    "physics": false,
+    "maxSpamCount": 15 
+}
