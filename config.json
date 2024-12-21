@@ -12,4 +12,5 @@
     "movementintervalms": [45000, 90000], 
     "movementdurationms": [1000, 2000], 
     "responsemessages": ["Halo juga!", "Apa kabar?", "Selamat datang!"]
+    "botCount": 5
 }
