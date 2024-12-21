@@ -5,10 +5,8 @@ let botNumber = 1; // Nomor awal bot
 let isBotRunning = false; // Status bot untuk mencegah overlap
 let activeBots = 0; // Jumlah bot yang sedang aktif
 
-// Fungsi untuk mendapatkan interval waktu acak
 const getRandomInterval = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-// Fungsi utama untuk memulai bot
 const startBot = (botNumber) => {
     if (isBotRunning) {
         console.log(`Bot ${botNumber} menunggu bot sebelumnya selesai.`);
@@ -24,7 +22,7 @@ const startBot = (botNumber) => {
     }
 
     isBotRunning = true;
-    const randomSuffix = Math.floor(Math.random() * 10000); // Suffix acak untuk username
+    const randomSuffix = Math.floor(Math.random() * 10000);
     const username = `${config.crackedusernameprefix}${botNumber}_${randomSuffix}`;
 
     const bot = mineflayer.createBot({
@@ -35,30 +33,26 @@ const startBot = (botNumber) => {
     });
 
     activeBots++; // Tambahkan bot aktif
-    let spamCount = 0; // Counter spam
+    let spamCount = 0;
 
     bot.on('login', () => {
         console.log(`Bot ${bot.username} berhasil login.`);
 
-        // Kirim perintah /register dan /login
         setTimeout(() => {
             bot.chat(`/register ${config.password} ${config.password}`);
             bot.chat(`/login ${config.password}`);
         }, 2000);
 
-        // Mulai spam
         const spamInterval = setInterval(() => {
             if (spamCount < config.maxspamperbot) {
                 bot.chat(config.spammessage);
                 spamCount++;
                 console.log(`Bot ${bot.username} mengirim pesan ke-${spamCount}`);
             } else {
-                clearInterval(spamInterval); // Hentikan spam
+                clearInterval(spamInterval);
                 setTimeout(() => {
-                    bot.end(); // Bot logout
+                    bot.end();
                     console.log(`Bot ${bot.username} selesai spam dan keluar.`);
-
-                    // Pindah ke bot berikutnya
                     activeBots--;
                     isBotRunning = false;
                     botNumber++;
@@ -69,7 +63,7 @@ const startBot = (botNumber) => {
                     } else {
                         console.log('Semua bot telah selesai.');
                     }
-                }, 2000); // Tunggu sebelum logout
+                }, 2000);
             }
         }, config.spamintervalms);
     });
@@ -78,8 +72,6 @@ const startBot = (botNumber) => {
         console.log(`Bot ${bot.username} dikeluarkan: ${reason}`);
         activeBots--;
         isBotRunning = false;
-
-        // Pindah ke bot berikutnya
         botNumber++;
         if (botNumber <= config.maxbots) {
             setTimeout(() => {
@@ -92,8 +84,6 @@ const startBot = (botNumber) => {
         console.log(`Bot ${bot.username} mengalami error:`, err);
         activeBots--;
         isBotRunning = false;
-
-        // Pindah ke bot berikutnya
         botNumber++;
         if (botNumber <= config.maxbots) {
             setTimeout(() => {
@@ -111,4 +101,4 @@ const startBot = (botNumber) => {
 
 // Mulai bot pertama
 startBot(botNumber);
-                
+            
