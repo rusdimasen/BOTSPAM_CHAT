@@ -1,1 +1,121 @@
-function _0x465a(_0x46f33d,_0x2d99c5){var _0x2235d5=_0x2235();return _0x465a=function(_0x465aeb,_0x35fb3b){_0x465aeb=_0x465aeb-0x94;var _0x49a12d=_0x2235d5[_0x465aeb];return _0x49a12d;},_0x465a(_0x46f33d,_0x2d99c5);}var _0x55f19d=_0x465a;(function(_0x39257f,_0x1250b0){var _0xbae981=_0x465a,_0x187ff7=_0x39257f();while(!![]){try{var _0x44954b=parseInt(_0xbae981(0xab))/0x1+-parseInt(_0xbae981(0xaa))/0x2*(parseInt(_0xbae981(0xb1))/0x3)+-parseInt(_0xbae981(0x99))/0x4+-parseInt(_0xbae981(0x9f))/0x5*(-parseInt(_0xbae981(0xb0))/0x6)+parseInt(_0xbae981(0xa4))/0x7+-parseInt(_0xbae981(0x97))/0x8+parseInt(_0xbae981(0xa7))/0x9;if(_0x44954b===_0x1250b0)break;else _0x187ff7['push'](_0x187ff7['shift']());}catch(_0x176371){_0x187ff7['push'](_0x187ff7['shift']());}}}(_0x2235,0xe7a17));const snekfetch=require('snekfetch'),config=require(_0x55f19d(0x9a));let currentNumber=0x64;function createBot(_0x40f1f0){var _0x1e0fe5=_0x55f19d;if(config[_0x1e0fe5(0xa6)])snekfetch[_0x1e0fe5(0xb3)]('http://api.thealtening.com/v1/generate?token='+config[_0x1e0fe5(0x9b)]+_0x1e0fe5(0x9e))['then'](_0x35a87a=>{var _0x4b45e3=_0x1e0fe5,_0x1a012d=require(_0x4b45e3(0xa2)),_0x191b44=_0x1a012d['createBot']({'host':config['ip'],'port':config[_0x4b45e3(0xb8)],'username':_0x35a87a[_0x4b45e3(0xac)]['token'],'password':'a','version':config[_0x4b45e3(0x9c)],'plugins':{'conversions':![],'furnace':![],'math':![],'painting':![],'scoreboard':![],'villager':![],'bed':![],'book':![],'boss_bar':![],'chest':![],'command_block':![],'craft':![],'digging':![],'dispenser':![],'enchantment_table':![],'experience':![],'rain':![],'ray_trace':![],'sound':![],'tablist':![],'time':![],'title':![],'physics':config[_0x4b45e3(0xa5)],'blocks':!![]}});handleBot(_0x191b44,_0x40f1f0);});else{var _0x44fc50=require(_0x1e0fe5(0xa2)),_0x118739=_0x44fc50[_0x1e0fe5(0xaf)]({'host':config['ip'],'port':config[_0x1e0fe5(0xb8)],'username':''+config[_0x1e0fe5(0x94)]+_0x40f1f0,'version':config[_0x1e0fe5(0x9c)],'plugins':{'conversions':![],'furnace':![],'math':![],'painting':![],'scoreboard':![],'villager':![],'bed':![],'book':![],'boss_bar':![],'chest':![],'command_block':![],'craft':![],'digging':![],'dispenser':![],'enchantment_table':![],'experience':![],'rain':![],'ray_trace':![],'sound':![],'tablist':![],'time':![],'title':![],'physics':config[_0x1e0fe5(0xa5)],'blocks':!![]}});handleBot(_0x118739,_0x40f1f0);}}function _0x2235(){var _0x46a0eb=['Bot\x20','/register\x20p@ssword123\x20p@ssword123','mineflayer','spawn','8274714gtHWlq','physics','altening','18008298xmvEhf','error','spammessage','140ShOzEj','873358vEJthX','body','\x20selesai\x20spam.','loginintervalms','createBot','48CnlyZD','61011SwkWWp','username','get','spamintervalms','chat','quit','/login\x20p@ssword123','port','crackedusernameprefix','\x20ditendang:','\x20telah\x20masuk\x20ke\x20dunia.','13871168STakap','\x20mulai\x20spam.','6037700nQAdXl','./config.json','altening_token','version','log','&info=true','974555tkqUDm'];_0x2235=function(){return _0x46a0eb;};return _0x2235();}function handleBot(_0x4d23b5,_0x538b7c){var _0x5622a8=_0x55f19d;_0x4d23b5['on']('login',()=>{var _0x5c1970=_0x465a;_0x4d23b5[_0x5c1970(0xb5)](_0x5c1970(0xb7)),_0x4d23b5['chat'](_0x5c1970(0xa1));let _0x58aa65=0x0;console[_0x5c1970(0x9d)](_0x5c1970(0xa0)+_0x4d23b5[_0x5c1970(0xb2)]+_0x5c1970(0x98));const _0x3180f3=setInterval(()=>{var _0x26f32f=_0x5c1970;_0x58aa65<0xf?(_0x4d23b5[_0x26f32f(0xb5)](config[_0x26f32f(0xa9)]),_0x58aa65++):(clearInterval(_0x3180f3),console[_0x26f32f(0x9d)](_0x26f32f(0xa0)+_0x4d23b5[_0x26f32f(0xb2)]+_0x26f32f(0xad)),_0x4d23b5[_0x26f32f(0xb6)](),setTimeout(()=>createBot(_0x538b7c+0x1),config[_0x26f32f(0xae)]));},config[_0x5c1970(0xb4)]);}),_0x4d23b5['on'](_0x5622a8(0xa3),()=>{var _0x389bfe=_0x5622a8;console[_0x389bfe(0x9d)](_0x389bfe(0xa0)+_0x4d23b5[_0x389bfe(0xb2)]+_0x389bfe(0x96));}),_0x4d23b5['on'](_0x5622a8(0xa8),_0x5c5dad=>{var _0x419bba=_0x5622a8;console[_0x419bba(0x9d)]('Error\x20pada\x20Bot\x20'+_0x4d23b5[_0x419bba(0xb2)]+':',_0x5c5dad),setTimeout(()=>createBot(_0x538b7c+0x1),config['loginintervalms']);}),_0x4d23b5['on']('kicked',_0x2c7070=>{var _0x4702ee=_0x5622a8;console['log'](_0x4702ee(0xa0)+_0x4d23b5['username']+_0x4702ee(0x95),_0x2c7070),setTimeout(()=>createBot(_0x538b7c+0x1),config[_0x4702ee(0xae)]);});}createBot(currentNumber);
+const snekfetch = require("snekfetch");
+const config = require("./config.json");
+let currentNumber = 100; // Mulai dari BOT100
+
+function createBot(botNumber) {
+    if (config.altening) {
+        snekfetch.get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`).then(n => {
+            var mineflayer = require('mineflayer');
+            var bot = mineflayer.createBot({
+                host: config.ip,
+                port: config.port,
+                username: n.body.token,
+                password: "a",
+                version: config.version,
+                plugins: {
+                    conversions: false,
+                    furnace: false,
+                    math: false,
+                    painting: false,
+                    scoreboard: false,
+                    villager: false,
+                    bed: false,
+                    book: false,
+                    boss_bar: false,
+                    chest: false,
+                    command_block: false,
+                    craft: false,
+                    digging: false,
+                    dispenser: false,
+                    enchantment_table: false,
+                    experience: false,
+                    rain: false,
+                    ray_trace: false,
+                    sound: false,
+                    tablist: false,
+                    time: false,
+                    title: false,
+                    physics: config.physics,
+                    blocks: true
+                }
+            });
+
+            handleBot(bot, botNumber);
+        });
+    } else {
+        var mineflayer = require('mineflayer');
+        var bot = mineflayer.createBot({
+            host: config.ip,
+            port: config.port,
+            username: `${config.crackedusernameprefix}${botNumber}`,
+            version: config.version,
+            plugins: {
+                conversions: false,
+                furnace: false,
+                math: false,
+                painting: false,
+                scoreboard: false,
+                villager: false,
+                bed: false,
+                book: false,
+                boss_bar: false,
+                chest: false,
+                command_block: false,
+                craft: false,
+                digging: false,
+                dispenser: false,
+                enchantment_table: false,
+                experience: false,
+                rain: false,
+                ray_trace: false,
+                sound: false,
+                tablist: false,
+                time: false,
+                title: false,
+                physics: config.physics,
+                blocks: true
+            }
+        });
+
+        handleBot(bot, botNumber);
+    }
+}
+
+function handleBot(bot, botNumber) {
+    bot.on('login', () => {
+        bot.chat("/login p@ssword123");
+        bot.chat("/register p@ssword123 p@ssword123");
+
+        let spamCount = 0;
+        console.log(`Bot ${bot.username} mulai spam.`);
+        const spamInterval = setInterval(() => {
+            if (spamCount < 15) { // Ganti 15 untuk menentukan jumlah spam
+                bot.chat(config.spammessage);
+                spamCount++;
+            } else {
+                clearInterval(spamInterval);
+                console.log(`Bot ${bot.username} selesai spam.`);
+                bot.quit(); // Bot keluar setelah spam selesai
+                setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya
+            }
+        }, config.spamintervalms);
+    });
+
+    bot.on('spawn', () => {
+        console.log(`Bot ${bot.username} telah masuk ke dunia.`);
+    });
+
+    bot.on('error', err => {
+        console.log(`Error pada Bot ${bot.username}:`, err);
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya jika error
+    });
+
+    bot.on('kicked', reason => {
+        console.log(`Bot ${bot.username} ditendang:`, reason);
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya jika ditendang
+    });
+}
+
+// Mulai dengan bot pertama
+createBot(currentNumber);
+                
