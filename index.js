@@ -1,10 +1,8 @@
 const snekfetch = require("snekfetch");
 const config = require("./config.json");
-let number = 100;
+let currentNumber = 100; // Mulai dari BOT100
 
-setInterval(() => {
-    number += 1;
-
+function createBot(botNumber) {
     if (config.altening) {
         snekfetch.get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`).then(n => {
             var mineflayer = require('mineflayer');
@@ -42,34 +40,14 @@ setInterval(() => {
                 }
             });
 
-            bot.on('login', () => {
-                setInterval(() => {
-                    bot.chat(config.spammessage);
-                }, config.spamintervalms);
-                console.log("Logged in " + bot.username);
-            });
-
-            // Fitur Anti-AFK
-            bot.on('spawn', () => {
-                setInterval(() => {
-                    const movements = ['forward', 'back', 'left', 'right'];
-                    const randomMove = movements[Math.floor(Math.random() * movements.length)];
-                    bot.setControlState(randomMove, true);
-                    setTimeout(() => bot.setControlState(randomMove, false), config.afkdurationms);
-                }, config.afkintervalms);
-            });
-
-            bot.on('error', err => console.log(err));
-            bot.on('kicked', function (reason) {
-                console.log("I got kicked for", reason, "lol");
-            });
+            handleBot(bot, botNumber);
         });
     } else {
         var mineflayer = require('mineflayer');
         var bot = mineflayer.createBot({
             host: config.ip,
             port: config.port,
-            username: config.crackedusernameprefix + number.toString(),
+            username: `${config.crackedusernameprefix}${botNumber}`,
             version: config.version,
             plugins: {
                 conversions: false,
@@ -99,28 +77,44 @@ setInterval(() => {
             }
         });
 
-        bot.on('login', () => {
-            bot.chat("/login p@ssword123");
-            bot.chat("/register p@ssword123 p@ssword123");
-            setInterval(() => {
-                bot.chat(config.spammessage);
-            }, config.spamintervalms);
-            console.log("Logged in " + bot.username);
-        });
-
-        // Fitur Anti-AFK
-        bot.on('spawn', () => {
-            setInterval(() => {
-                const movements = ['forward', 'back', 'left', 'right'];
-                const randomMove = movements[Math.floor(Math.random() * movements.length)];
-                bot.setControlState(randomMove, true);
-                setTimeout(() => bot.setControlState(randomMove, false), config.afkdurationms);
-            }, config.afkintervalms);
-        });
-
-        bot.on('error', err => console.log(err));
-        bot.on('kicked', function (reason) {
-            console.log("I got kicked for", reason, "lol");
-        });
+        handleBot(bot, botNumber);
     }
-}, config.loginintervalms);
+}
+
+function handleBot(bot, botNumber) {
+    bot.on('login', () => {
+        bot.chat("/login p@ssword123");
+        bot.chat("/register p@ssword123 p@ssword123");
+
+        let spamCount = 0;
+        console.log(`Bot ${bot.username} mulai spam.`);
+        const spamInterval = setInterval(() => {
+            if (spamCount < 10) {
+                bot.chat(config.spammessage);
+                spamCount++;
+            } else {
+                clearInterval(spamInterval);
+                console.log(`Bot ${bot.username} selesai spam.`);
+                bot.quit(); // Bot keluar setelah spam selesai
+                setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya
+            }
+        }, config.spamintervalms);
+    });
+
+    bot.on('spawn', () => {
+        console.log(`Bot ${bot.username} telah masuk ke dunia.`);
+    });
+
+    bot.on('error', err => {
+        console.log(`Error pada Bot ${bot.username}:`, err);
+    });
+
+    bot.on('kicked', reason => {
+        console.log(`Bot ${bot.username} ditendang:`, reason);
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya
+    });
+}
+
+// Mulai dengan bot pertama
+createBot(currentNumber);
+           
