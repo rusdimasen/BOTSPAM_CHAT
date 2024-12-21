@@ -1,4 +1,4 @@
-# Minecraft spam chat `Secara berkala`
+## Minecraft spam chat `Secara berkala`
 MinecraftSpamBot adalah alat bot spam Minecraft yang dirancang untuk menguji solusi anti-bot secara efektif
 
 ## Cara Penggunaan
@@ -10,7 +10,7 @@ MinecraftSpamBot adalah alat bot spam Minecraft yang dirancang untuk menguji sol
 <br>DONATE CREATOR! YUK
 <br>https://saweria.co/rusdinasen
 
-##CREATOR 
+## CREATOR 
 <br>@rusdimasen
 <br>https://github.com/rusdimasen
 
