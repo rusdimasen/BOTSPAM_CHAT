@@ -5,3 +5,7 @@ MinecraftSpamBot adalah alat bot spam Minecraft yang dirancang untuk menguji sol
 <br>1. Pastikan Anda sudah menginstal **Node.js** di sistem operasi Anda
 <br>2. Edit file konfigurasi `config.json` sesuai preferensi Anda
 <br>3. Buka terminal di direktori proyek ini dan jalankan perintah berikut: `npm i` Kemudian `node index.js`
+
+## Dukungan sawerian
+<br>DONATE CREATOR! YUK
+<br>https://saweria.co/rusdinasen
