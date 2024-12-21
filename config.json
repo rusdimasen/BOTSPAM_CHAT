@@ -7,9 +7,9 @@
     "altening": false, 
     "altening_token": "", 
     "spammessage": "spam", 
-    "spamintervalms": 1500, 
+    "spamintervalms": 5000, 
     "physics": false,
-    "movementintervalms": [30000, 60000], 
-    "movementdurationms": [500, 1000], 
+    "movementintervalms": [45000, 90000], 
+    "movementdurationms": [1000, 2000], 
     "responsemessages": ["Halo juga!", "Apa kabar?", "Selamat datang!"]
 }
