@@ -9,3 +9,11 @@ MinecraftSpamBot adalah alat bot spam Minecraft yang dirancang untuk menguji sol
 ## Dukungan sawerian
 <br>DONATE CREATOR! YUK
 <br>https://saweria.co/rusdinasen
+
+##CREATOR 
+<br>@rusdimasen
+<br>https://github.com/rusdimasen
+
+## NOTE!
+<br>gunakan script ini dengan bijak dan baik!
+<br>jangan melakukan nama pemilik script ini hormatilah creator kami!
