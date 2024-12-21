@@ -89,7 +89,7 @@ function handleBot(bot, botNumber) {
         let spamCount = 0;
         console.log(`Bot ${bot.username} mulai spam.`);
         const spamInterval = setInterval(() => {
-            if (spamCount < 10) {
+            if (spamCount < 15) { // Ganti 15 untuk menentukan jumlah spam
                 bot.chat(config.spammessage);
                 spamCount++;
             } else {
@@ -107,14 +107,15 @@ function handleBot(bot, botNumber) {
 
     bot.on('error', err => {
         console.log(`Error pada Bot ${bot.username}:`, err);
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya jika error
     });
 
     bot.on('kicked', reason => {
         console.log(`Bot ${bot.username} ditendang:`, reason);
-        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya jika ditendang
     });
 }
 
 // Mulai dengan bot pertama
 createBot(currentNumber);
-           
+                
