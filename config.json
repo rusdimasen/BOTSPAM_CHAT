@@ -1,14 +1,15 @@
 {
-    "crackedusernameprefix": "BOT",
-    "ip": "server.com",
-    "port": 25565,
-    "version": "1.12.2",
-    "loginintervalms": 1000,
-    "altening": false,
-    "altening_token": "",
-    "spammessage": "spam",
-    "spamintervalms": 1500,
+    "crackedusernameprefix": "BOT", 
+    "ip": "server.com", 
+    "port": 25565, 
+    "version": "1.12.2", 
+    "loginintervalms": 5000, 
+    "altening": false, 
+    "altening_token": "", 
+    "spammessage": "spam", 
+    "spamintervalms": 1500, 
     "physics": false,
-    "afkintervalms": 60000,
-    "afkdurationms": 1000
+    "movementintervalms": [30000, 60000], 
+    "movementdurationms": [500, 1000], 
+    "responsemessages": ["Halo juga!", "Apa kabar?", "Selamat datang!"]
 }
