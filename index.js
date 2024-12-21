@@ -1,104 +1,126 @@
-const mineflayer = require('mineflayer');
-const config = require('./config.json');
+const snekfetch = require("snekfetch");
+const config = require("./config.json");
+let number = 100;
 
-let botNumber = 1; // Nomor awal bot
-let isBotRunning = false; // Status bot untuk mencegah overlap
-let activeBots = 0; // Jumlah bot yang sedang aktif
+setInterval(() => {
+    number += 1;
 
-const getRandomInterval = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    if (config.altening) {
+        snekfetch.get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`).then(n => {
+            var mineflayer = require('mineflayer');
+            var bot = mineflayer.createBot({
+                host: config.ip,
+                port: config.port,
+                username: n.body.token,
+                password: "a",
+                version: config.version,
+                plugins: {
+                    conversions: false,
+                    furnace: false,
+                    math: false,
+                    painting: false,
+                    scoreboard: false,
+                    villager: false,
+                    bed: false,
+                    book: false,
+                    boss_bar: false,
+                    chest: false,
+                    command_block: false,
+                    craft: false,
+                    digging: false,
+                    dispenser: false,
+                    enchantment_table: false,
+                    experience: false,
+                    rain: false,
+                    ray_trace: false,
+                    sound: false,
+                    tablist: false,
+                    time: false,
+                    title: false,
+                    physics: config.physics,
+                    blocks: true
+                }
+            });
 
-const startBot = (botNumber) => {
-    if (isBotRunning) {
-        console.log(`Bot ${botNumber} menunggu bot sebelumnya selesai.`);
-        setTimeout(() => {
-            startBot(botNumber);
-        }, getRandomInterval(config.minloginintervalms, config.maxloginintervalms));
-        return;
-    }
+            bot.on('login', () => {
+                setInterval(() => {
+                    bot.chat(config.spammessage);
+                }, config.spamintervalms);
+                console.log("Logged in " + bot.username);
+            });
 
-    if (activeBots >= config.maxbots) {
-        console.log('Batas maksimum bot aktif tercapai. Menunggu giliran...');
-        return;
-    }
+            // Fitur Anti-AFK
+            bot.on('spawn', () => {
+                setInterval(() => {
+                    const movements = ['forward', 'back', 'left', 'right'];
+                    const randomMove = movements[Math.floor(Math.random() * movements.length)];
+                    bot.setControlState(randomMove, true);
+                    setTimeout(() => bot.setControlState(randomMove, false), config.afkdurationms);
+                }, config.afkintervalms);
+            });
 
-    isBotRunning = true;
-    const randomSuffix = Math.floor(Math.random() * 10000);
-    const username = `${config.crackedusernameprefix}${botNumber}_${randomSuffix}`;
-
-    const bot = mineflayer.createBot({
-        host: config.ip,
-        port: config.port,
-        username: username,
-        version: config.version,
-    });
-
-    activeBots++; // Tambahkan bot aktif
-    let spamCount = 0;
-
-    bot.on('login', () => {
-        console.log(`Bot ${bot.username} berhasil login.`);
-
-        setTimeout(() => {
-            bot.chat(`/register ${config.password} ${config.password}`);
-            bot.chat(`/login ${config.password}`);
-        }, 2000);
-
-        const spamInterval = setInterval(() => {
-            if (spamCount < config.maxspamperbot) {
-                bot.chat(config.spammessage);
-                spamCount++;
-                console.log(`Bot ${bot.username} mengirim pesan ke-${spamCount}`);
-            } else {
-                clearInterval(spamInterval);
-                setTimeout(() => {
-                    bot.end();
-                    console.log(`Bot ${bot.username} selesai spam dan keluar.`);
-                    activeBots--;
-                    isBotRunning = false;
-                    botNumber++;
-                    if (botNumber <= config.maxbots) {
-                        setTimeout(() => {
-                            startBot(botNumber);
-                        }, getRandomInterval(config.minloginintervalms, config.maxloginintervalms));
-                    } else {
-                        console.log('Semua bot telah selesai.');
-                    }
-                }, 2000);
+            bot.on('error', err => console.log(err));
+            bot.on('kicked', function (reason) {
+                console.log("I got kicked for", reason, "lol");
+            });
+        });
+    } else {
+        var mineflayer = require('mineflayer');
+        var bot = mineflayer.createBot({
+            host: config.ip,
+            port: config.port,
+            username: config.crackedusernameprefix + number.toString(),
+            version: config.version,
+            plugins: {
+                conversions: false,
+                furnace: false,
+                math: false,
+                painting: false,
+                scoreboard: false,
+                villager: false,
+                bed: false,
+                book: false,
+                boss_bar: false,
+                chest: false,
+                command_block: false,
+                craft: false,
+                digging: false,
+                dispenser: false,
+                enchantment_table: false,
+                experience: false,
+                rain: false,
+                ray_trace: false,
+                sound: false,
+                tablist: false,
+                time: false,
+                title: false,
+                physics: config.physics,
+                blocks: true
             }
-        }, config.spamintervalms);
-    });
+        });
 
-    bot.on('kicked', (reason) => {
-        console.log(`Bot ${bot.username} dikeluarkan: ${reason}`);
-        activeBots--;
-        isBotRunning = false;
-        botNumber++;
-        if (botNumber <= config.maxbots) {
-            setTimeout(() => {
-                startBot(botNumber);
-            }, getRandomInterval(config.minloginintervalms, config.maxloginintervalms));
-        }
-    });
+        bot.on('login', () => {
+            bot.chat("/login p@ssword123");
+            bot.chat("/register p@ssword123 p@ssword123");
+            setInterval(() => {
+                bot.chat(config.spammessage);
+            }, config.spamintervalms);
+            console.log("Logged in " + bot.username);
+        });
 
-    bot.on('error', (err) => {
-        console.log(`Bot ${bot.username} mengalami error:`, err);
-        activeBots--;
-        isBotRunning = false;
-        botNumber++;
-        if (botNumber <= config.maxbots) {
-            setTimeout(() => {
-                startBot(botNumber);
-            }, getRandomInterval(config.minloginintervalms, config.maxloginintervalms));
-        }
-    });
+        // Fitur Anti-AFK
+        bot.on('spawn', () => {
+            setInterval(() => {
+                const movements = ['forward', 'back', 'left', 'right'];
+                const randomMove = movements[Math.floor(Math.random() * movements.length)];
+                bot.setControlState(randomMove, true);
+                setTimeout(() => bot.setControlState(randomMove, false), config.afkdurationms);
+            }, config.afkintervalms);
+        });
 
-    bot.on('end', () => {
-        console.log(`Bot ${bot.username} disconnected.`);
-        activeBots--;
-        isBotRunning = false;
-    });
-};
-
-// Mulai bot pertama
-startBot(botNumber);
-            
+        bot.on('error', err => console.log(err));
+        bot.on('kicked', function (reason) {
+            console.log("I got kicked for", reason, "lol");
+        });
+    }
+}, config.loginintervalms);

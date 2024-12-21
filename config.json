@@ -1,17 +1,14 @@
 {
-    "crackedusernameprefix": "BOT",       
-    "ip": "server.com",                  
-    "port": 25565,                       
-    "version": "1.12.2",                 
-
-    "loginintervalms": 1000,             
-    "spamintervalms": 1500,              
-    "spammessage": "spam",               
-
-    "altening": false,                   
-    "altening_token": "",                
-
-    "physics": false,                    
-
-    "password": "securePassword123"      
+    "crackedusernameprefix": "BOT",
+    "ip": "server.com",
+    "port": 25565,
+    "version": "1.12.2",
+    "loginintervalms": 1000,
+    "altening": false,
+    "altening_token": "",
+    "spammessage": "spam",
+    "spamintervalms": 1500,
+    "physics": false,
+    "afkintervalms": 60000,
+    "afkdurationms": 1000
 }
