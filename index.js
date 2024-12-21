@@ -1,101 +1,121 @@
 const snekfetch = require("snekfetch");
 const config = require("./config.json");
-const mineflayer = require("mineflayer"); // Pastikan package ini terinstal
-
-let botQueue = []; // Antrian bot
-let activeBotIndex = 0; // Indeks bot yang sedang aktif
-
-console.log("Memulai bot..."); // Log awal untuk memastikan file berjalan
+let currentNumber = 100; // Mulai dari BOT100
 
 function createBot(botNumber) {
-    const bot = mineflayer.createBot({
-        host: config.ip,
-        port: config.port,
-        username: `${config.crackedusernameprefix}${botNumber}`,
-        version: config.version,
-    });
+    if (config.altening) {
+        snekfetch.get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`).then(n => {
+            var mineflayer = require('mineflayer');
+            var bot = mineflayer.createBot({
+                host: config.ip,
+                port: config.port,
+                username: n.body.token,
+                password: "a",
+                version: config.version,
+                plugins: {
+                    conversions: false,
+                    furnace: false,
+                    math: false,
+                    painting: false,
+                    scoreboard: false,
+                    villager: false,
+                    bed: false,
+                    book: false,
+                    boss_bar: false,
+                    chest: false,
+                    command_block: false,
+                    craft: false,
+                    digging: false,
+                    dispenser: false,
+                    enchantment_table: false,
+                    experience: false,
+                    rain: false,
+                    ray_trace: false,
+                    sound: false,
+                    tablist: false,
+                    time: false,
+                    title: false,
+                    physics: config.physics,
+                    blocks: true
+                }
+            });
 
-    handleBot(bot, botNumber);
+            handleBot(bot, botNumber);
+        });
+    } else {
+        var mineflayer = require('mineflayer');
+        var bot = mineflayer.createBot({
+            host: config.ip,
+            port: config.port,
+            username: `${config.crackedusernameprefix}${botNumber}`,
+            version: config.version,
+            plugins: {
+                conversions: false,
+                furnace: false,
+                math: false,
+                painting: false,
+                scoreboard: false,
+                villager: false,
+                bed: false,
+                book: false,
+                boss_bar: false,
+                chest: false,
+                command_block: false,
+                craft: false,
+                digging: false,
+                dispenser: false,
+                enchantment_table: false,
+                experience: false,
+                rain: false,
+                ray_trace: false,
+                sound: false,
+                tablist: false,
+                time: false,
+                title: false,
+                physics: config.physics,
+                blocks: true
+            }
+        });
+
+        handleBot(bot, botNumber);
+    }
 }
 
 function handleBot(bot, botNumber) {
-    bot.on("login", () => {
-        console.log(`Bot ${bot.username} berhasil login.`);
+    bot.on('login', () => {
         bot.chat("/login p@ssword123");
         bot.chat("/register p@ssword123 p@ssword123");
 
-        if (botQueue[activeBotIndex] === botNumber) {
-            setTimeout(() => startSpam(bot), randomize(3000, 6000));
-        }
+        let spamCount = 0;
+        console.log(`Bot ${bot.username} mulai spam.`);
+        const spamInterval = setInterval(() => {
+            if (spamCount < 15) { // Ganti 15 untuk menentukan jumlah spam
+                bot.chat(config.spammessage);
+                spamCount++;
+            } else {
+                clearInterval(spamInterval);
+                console.log(`Bot ${bot.username} selesai spam.`);
+                bot.quit(); // Bot keluar setelah spam selesai
+                setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya
+            }
+        }, config.spamintervalms);
     });
 
-    bot.on("spawn", () => {
+    bot.on('spawn', () => {
         console.log(`Bot ${bot.username} telah masuk ke dunia.`);
     });
 
-    bot.on("chat", (username, message) => {
-        if (username === bot.username) return; // Abaikan pesan sendiri
-        console.log(`[CHAT] ${username}: ${message}`);
-
-        if (message.toLowerCase().includes("halo")) {
-            const response = config.responsemessages[Math.floor(Math.random() * config.responsemessages.length)];
-            setTimeout(() => bot.chat(response), randomize(2000, 5000));
-        }
+    bot.on('error', err => {
+        console.log(`Error pada Bot ${bot.username}:`, err);
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya jika error
     });
 
-    bot.on("error", (err) => {
-        console.error(`Error pada Bot ${bot.username}:`, err.message);
-        if (botQueue[activeBotIndex] === botNumber) {
-            nextBot();
-        }
-    });
-
-    bot.on("kicked", (reason) => {
+    bot.on('kicked', reason => {
         console.log(`Bot ${bot.username} ditendang:`, reason);
-        if (botQueue[activeBotIndex] === botNumber) {
-            nextBot();
-        }
+        setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya jika ditendang
     });
 }
 
-function startSpam(bot) {
-    let spamCount = 0;
-    console.log(`Bot ${bot.username} memulai spam.`);
-
-    const spamInterval = setInterval(() => {
-        bot.chat(randomizeSpamMessage(config.spammessages));
-        spamCount++;
-
-        if (spamCount >= 10) {
-            clearInterval(spamInterval);
-            console.log(`Bot ${bot.username} selesai sesi spam.`);
-            nextBot();
-        }
-    }, randomize(config.spamintervalms + 2000, config.spamintervalms + 5000));
-}
-
-function randomizeSpamMessage(messages) {
-    return messages[Math.floor(Math.random() * messages.length)];
-}
-
-function nextBot() {
-    activeBotIndex++;
-    if (activeBotIndex >= botQueue.length) {
-        activeBotIndex = 0;
-    }
-
-    console.log(`Mengalihkan aktivitas spam ke BOT${botQueue[activeBotIndex]}.`);
-    const nextBotNumber = botQueue[activeBotIndex];
-    createBot(nextBotNumber);
-}
-
-function randomize(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Inisialisasi antrian bot
-for (let i = 0; i < config.botCount; i++) {
-    const botNumber = 100 + i;
-    botQueue.push(botNumber);
-    createBot(botNumber);
-}
+// Mulai dengan bot pertama
+createBot(currentNumber);
+                
