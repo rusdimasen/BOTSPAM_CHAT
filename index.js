@@ -3,28 +3,30 @@ const config = require("./config.json");
 let currentNumber = 100; // Mulai dari BOT100
 
 function createBot(botNumber) {
-    const mineflayer = require('mineflayer');
+    const mineflayer = require("mineflayer");
     let bot;
 
     if (config.altening) {
-        snekfetch.get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`).then(n => {
-            bot = mineflayer.createBot({
-                host: config.ip,
-                port: config.port,
-                username: n.body.token,
-                password: "a",
-                version: config.version,
-                plugins: generatePluginConfig()
+        snekfetch
+            .get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`)
+            .then((n) => {
+                bot = mineflayer.createBot({
+                    host: config.ip,
+                    port: config.port,
+                    username: n.body.token,
+                    password: "a",
+                    version: config.version,
+                    plugins: generatePluginConfig(),
+                });
+                handleBot(bot, botNumber);
             });
-            handleBot(bot, botNumber);
-        });
     } else {
         bot = mineflayer.createBot({
             host: config.ip,
             port: config.port,
             username: `${config.crackedusernameprefix}${botNumber}`,
             version: config.version,
-            plugins: generatePluginConfig()
+            plugins: generatePluginConfig(),
         });
         handleBot(bot, botNumber);
     }
@@ -55,12 +57,12 @@ function generatePluginConfig() {
         time: false,
         title: false,
         physics: config.physics,
-        blocks: true
+        blocks: true,
     };
 }
 
 function handleBot(bot, botNumber) {
-    bot.on('login', () => {
+    bot.on("login", () => {
         bot.chat("/login p@ssword123");
         bot.chat("/register p@ssword123 p@ssword123");
 
@@ -68,7 +70,7 @@ function handleBot(bot, botNumber) {
         spamMessages(bot, botNumber);
     });
 
-    bot.on('spawn', () => {
+    bot.on("spawn", () => {
         console.log(`Bot ${bot.username} telah masuk ke dunia.`);
     });
 
@@ -80,34 +82,38 @@ function handleBot(bot, botNumber) {
         }
     });
 
-    bot.on('error', err => {
+    bot.on("error", (err) => {
         console.error(`Error pada Bot ${bot.username}:`, err);
-        restartBot(botNumber);
+        restartNextBot(botNumber); // Jika error, lanjutkan ke bot berikutnya
     });
 
-    bot.on('kicked', reason => {
+    bot.on("kicked", (reason) => {
         console.warn(`Bot ${bot.username} ditendang:`, reason);
-        restartBot(botNumber);
+        restartNextBot(botNumber); // Jika ditendang, lanjutkan ke bot berikutnya
     });
 }
 
 function spamMessages(bot, botNumber) {
     let spamCount = 0;
     const spamInterval = setInterval(() => {
-        if (spamCount < 15) { // Ganti 15 untuk jumlah spam
+        if (spamCount < 15) { // Ganti 15 untuk jumlah pesan spam
             bot.chat(config.spammessage);
             spamCount++;
         } else {
             clearInterval(spamInterval);
             console.log(`Bot ${bot.username} selesai spam.`);
             bot.quit(); // Bot keluar setelah spam selesai
-            restartBot(botNumber);
+            restartNextBot(botNumber);
         }
     }, config.spamintervalms);
 }
 
-function restartBot(botNumber) {
-    setTimeout(() => createBot(botNumber + 1), config.loginintervalms); // Lanjut ke bot berikutnya
+function restartNextBot(botNumber) {
+    const nextBotNumber = botNumber + 1;
+    setTimeout(() => {
+        console.log(`Memulai bot berikutnya: BOT${nextBotNumber}`);
+        createBot(nextBotNumber);
+    }, config.loginintervalms); // Tunggu sebelum membuat bot berikutnya
 }
 
 // Mulai dengan bot pertama
