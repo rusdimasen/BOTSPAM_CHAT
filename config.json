@@ -6,9 +6,9 @@
     "loginintervalms": 1000,
     "altening": false,
     "altening_token": "",
-    "spammessage": "Spam",
+    "spammessage": "spam",
     "spamintervalms": 1500,
     "physics": false,
-    "afkintervalms": 60000,
-    "afkdurationms": 1000
+    "afkintervalms": 30000,
+    "afkdurationms": 2000
 }

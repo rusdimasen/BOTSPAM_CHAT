@@ -1,126 +1,69 @@
-const snekfetch = require("snekfetch");
-const config = require("./config.json");
-const mineflayer = require("mineflayer");
-
-let currentNumber = 100; // Nomor bot pertama
+const mineflayer = require('mineflayer');
+const config = require('./config.json');
+let currentNumber = 100; // Mulai dari BOT100
 
 function createBot(botNumber) {
-    const username = config.altening ? getAlteningUsername(botNumber) : `${config.crackedusernameprefix}${botNumber}`;
-    initializeBot(username, botNumber);
-}
-
-function getAlteningUsername(botNumber) {
-    try {
-        const res = snekfetch.get(`http://api.thealtening.com/v1/generate?token=${config.altening_token}&info=true`);
-        return res.body.token;
-    } catch (err) {
-        console.error(`Gagal mendapatkan token Altening untuk BOT${botNumber}:`, err);
-        return null;
-    }
-}
-
-function initializeBot(username, botNumber) {
-    if (!username) {
-        console.error(`Bot ${botNumber} tidak dapat dilanjutkan karena username null.`);
-        restartNextBot(botNumber);
-        return;
-    }
-
     const bot = mineflayer.createBot({
         host: config.ip,
         port: config.port,
-        username: username,
+        username: `${config.crackedusernameprefix}${botNumber}`,
         version: config.version,
-        plugins: { physics: config.physics, blocks: true },
+        plugins: {
+            physics: config.physics,
+            blocks: true,
+        }
     });
 
-    handleBot(bot, botNumber);
+    setupBotEvents(bot, botNumber);
 }
 
-function handleBot(bot, botNumber) {
-    let antiAFKInterval, spamInterval;
-    const maxSpamCount = 15;
+function setupBotEvents(bot, botNumber) {
+    bot.on('login', () => {
+        console.log(`Bot ${bot.username} berhasil login.`);
+        bot.chat("/login password123");
+        bot.chat("/register password123 password123");
 
-    bot.on("login", () => {
-        console.log(`BOT${botNumber} berhasil login.`);
-        bot.chat("/login p@ssword123");
-        bot.chat("/register p@ssword123 p@ssword123");
-
-        // Mulai spam dan anti-AFK
-        spamInterval = startSpam(bot, botNumber, maxSpamCount);
-        antiAFKInterval = startAntiAFK(bot);
+        startSpam(bot);
+        startAntiAFK(bot);
     });
 
-    bot.on("spawn", () => {
-        console.log(`BOT${botNumber} telah masuk ke dunia.`);
+    bot.on('spawn', () => {
+        console.log(`Bot ${bot.username} telah masuk ke dunia.`);
     });
 
-    bot.on("error", (err) => {
-        console.error(`Error pada BOT${botNumber}: ${err.message}`);
-        restartNextBot(botNumber, "error");
+    bot.on('error', (err) => {
+        console.log(`Error pada Bot ${bot.username}:`, err.message);
+        restartBot(botNumber);
     });
 
-    bot.on("kicked", (reason) => {
-        console.warn(`BOT${botNumber} ditendang: ${reason}`);
-        restartNextBot(botNumber, "kicked");
-    });
-
-    bot.on("end", () => {
-        console.log(`BOT${botNumber} keluar.`);
-        cleanupAndRestart(bot, antiAFKInterval, spamInterval, botNumber);
-    });
-
-    // Jika server mendeteksi bot menggunakan packet mencurigakan (tab_complete)
-    bot.on("packet", (data, metadata) => {
-        if (metadata && metadata.name === "tab_complete") {
-            console.warn(`BOT${botNumber} mendeteksi paket mencurigakan: tab_complete.`);
-        }
+    bot.on('kicked', (reason) => {
+        console.log(`Bot ${bot.username} ditendang:`, reason);
+        restartBot(botNumber);
     });
 }
 
-function startSpam(bot, botNumber, maxSpamCount) {
-    let spamCount = 0;
-    return setInterval(() => {
-        if (spamCount >= maxSpamCount) {
-            console.log(`BOT${botNumber} selesai spam.`);
-            bot.quit(); // Bot keluar setelah spam selesai
-            return;
-        }
+function startSpam(bot) {
+    if (!config.spammessage || config.spamintervalms <= 0) return;
 
+    console.log(`Bot ${bot.username} mulai spam.`);
+    setInterval(() => {
         bot.chat(config.spammessage);
-        spamCount++;
     }, config.spamintervalms);
 }
 
 function startAntiAFK(bot) {
-    return setInterval(() => {
-        bot.setControlState("jump", true);
-        setTimeout(() => bot.setControlState("jump", false), config.afkdurationms);
+    if (config.afkintervalms <= 0 || config.afkdurationms <= 0) return;
+
+    console.log(`Bot ${bot.username} anti-AFK aktif.`);
+    setInterval(() => {
+        bot.setControlState('jump', true);
+        setTimeout(() => bot.setControlState('jump', false), config.afkdurationms);
     }, config.afkintervalms);
 }
 
-function cleanupAndRestart(bot, antiAFKInterval, spamInterval, botNumber) {
-    clearInterval(antiAFKInterval);
-    clearInterval(spamInterval);
-
-    // Jangan memulai bot baru jika ada error atau kicked terus-menerus
-    setTimeout(() => {
-        restartNextBot(botNumber);
-    }, config.loginintervalms); // Tunggu sebelum membuat bot berikutnya
+function restartBot(botNumber) {
+    setTimeout(() => createBot(botNumber + 1), config.loginintervalms);
 }
 
-function restartNextBot(botNumber, reason = "unknown") {
-    console.log(`BOT${botNumber} dihentikan karena: ${reason}`);
-    const nextBotNumber = botNumber + 1;
-    console.log(`Memulai bot berikutnya: BOT${nextBotNumber}`);
-    createBot(nextBotNumber);
-}
-
-// Validasi konfigurasi sebelum mulai
-if (!config.ip || !config.port || !config.version) {
-    throw new Error("Konfigurasi tidak lengkap di file config.json!");
-}
-
-// Mulai dari bot pertama
+// Mulai dengan bot pertama
 createBot(currentNumber);
-            
