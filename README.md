@@ -8,6 +8,7 @@ MinecraftSpamBot adalah alat bot spam Minecraft yang dirancang untuk menguji sol
 
 ## Spoiler
 ![alt text](https://i.ibb.co.com/rcZGgbq/IMG-20241222-WA0115.jpg?raw=true)
+![alt text](https://i.ibb.co.com/PcCqycq/IMG-20241222-WA0116.jpg?raw=true)
 
 ## Dukungan sawerian
 <br>DONATE CREATOR! YUK
