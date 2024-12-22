@@ -15,7 +15,7 @@ function getAlteningUsername(botNumber) {
         return res.body.token;
     } catch (err) {
         console.error(`Gagal mendapatkan token Altening untuk BOT${botNumber}:`, err);
-        return null; // Menghindari crash jika token gagal didapatkan
+        return null;
     }
 }
 
@@ -39,10 +39,10 @@ function initializeBot(username, botNumber) {
 
 function handleBot(bot, botNumber) {
     let antiAFKInterval, spamInterval;
-    const maxSpamCount = 15; // Jumlah maksimal pesan spam
+    const maxSpamCount = 15;
 
     bot.on("login", () => {
-        console.log(`Bot ${bot.username} berhasil login.`);
+        console.log(`BOT${botNumber} berhasil login.`);
         bot.chat("/login p@ssword123");
         bot.chat("/register p@ssword123 p@ssword123");
 
@@ -51,19 +51,30 @@ function handleBot(bot, botNumber) {
         antiAFKInterval = startAntiAFK(bot);
     });
 
+    bot.on("spawn", () => {
+        console.log(`BOT${botNumber} telah masuk ke dunia.`);
+    });
+
     bot.on("error", (err) => {
         console.error(`Error pada BOT${botNumber}: ${err.message}`);
-        cleanupAndRestart(bot, antiAFKInterval, spamInterval, botNumber);
+        restartNextBot(botNumber, "error");
     });
 
     bot.on("kicked", (reason) => {
         console.warn(`BOT${botNumber} ditendang: ${reason}`);
-        cleanupAndRestart(bot, antiAFKInterval, spamInterval, botNumber);
+        restartNextBot(botNumber, "kicked");
     });
 
     bot.on("end", () => {
         console.log(`BOT${botNumber} keluar.`);
         cleanupAndRestart(bot, antiAFKInterval, spamInterval, botNumber);
+    });
+
+    // Jika server mendeteksi bot menggunakan packet mencurigakan (tab_complete)
+    bot.on("packet", (data, metadata) => {
+        if (metadata && metadata.name === "tab_complete") {
+            console.warn(`BOT${botNumber} mendeteksi paket mencurigakan: tab_complete.`);
+        }
     });
 }
 
@@ -72,7 +83,7 @@ function startSpam(bot, botNumber, maxSpamCount) {
     return setInterval(() => {
         if (spamCount >= maxSpamCount) {
             console.log(`BOT${botNumber} selesai spam.`);
-            bot.quit(); // Bot keluar setelah selesai spam
+            bot.quit(); // Bot keluar setelah spam selesai
             return;
         }
 
@@ -92,12 +103,14 @@ function cleanupAndRestart(bot, antiAFKInterval, spamInterval, botNumber) {
     clearInterval(antiAFKInterval);
     clearInterval(spamInterval);
 
+    // Jangan memulai bot baru jika ada error atau kicked terus-menerus
     setTimeout(() => {
         restartNextBot(botNumber);
     }, config.loginintervalms); // Tunggu sebelum membuat bot berikutnya
 }
 
-function restartNextBot(botNumber) {
+function restartNextBot(botNumber, reason = "unknown") {
+    console.log(`BOT${botNumber} dihentikan karena: ${reason}`);
     const nextBotNumber = botNumber + 1;
     console.log(`Memulai bot berikutnya: BOT${nextBotNumber}`);
     createBot(nextBotNumber);
@@ -110,3 +123,4 @@ if (!config.ip || !config.port || !config.version) {
 
 // Mulai dari bot pertama
 createBot(currentNumber);
+            
