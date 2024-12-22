@@ -21,6 +21,7 @@ MinecraftSpamBot adalah alat bot spam Minecraft yang dirancang untuk menguji sol
 ## CREATOR 
 <br>@rusdimasen
 <br>https://github.com/rusdimasen
+<br>https://youtube.com/@rusdimasen28
 
 ## NOTE!
 <br>gunakan script ini dengan bijak dan baik!
