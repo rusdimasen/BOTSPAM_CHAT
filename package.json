@@ -6,5 +6,10 @@
   "dependencies": {
     "snekfetch": "x",
     "mineflayer": "x"
-  }
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Rusdimasen Creator",
+  "license": "MIT"
 }
