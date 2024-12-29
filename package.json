@@ -1,7 +1,6 @@
 {
-  "name": "Minecraft cool!",
+  "name": "Minecraft",
   "version": "1.0.0",
-  "description": "Ddos bot!",
   "main": "index.js",
   "dependencies": {
     "snekfetch": "x",
@@ -9,7 +8,5 @@
   },
   "scripts": {
     "start": "node index.js"
-  },
-  "author": "Rusdi",
-  "license": "MIT"
+  }
 }
