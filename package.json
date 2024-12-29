@@ -1,15 +1,15 @@
 {
-  "name": "MinecraftSpamBot",
+  "name": "Minecraft",
   "version": "1.0.0",
-  "description": "MinecraftSpamBot",
+  "description": "",
   "main": "index.js",
   "dependencies": {
-    "snekfetch": "x",
-    "mineflayer": "x"
+    "snekfetch": "^4.0.4",
+    "mineflayer": "^3.11.0"
   },
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Rusdimasen Creator",
+  "author": "Rusdi",
   "license": "MIT"
 }
