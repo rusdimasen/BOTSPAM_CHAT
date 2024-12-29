@@ -1,7 +1,7 @@
 {
-  "name": "Minecraft",
+  "name": "Minecraft cool!",
   "version": "1.0.0",
-  "description": "",
+  "description": "Ddos bot!",
   "main": "index.js",
   "dependencies": {
     "snekfetch": "x",
