@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "snekfetch": "^4.0.4",
-    "mineflayer": "^3.11.0"
+    "snekfetch": "x",
+    "mineflayer": "x"
   },
   "scripts": {
     "start": "node index.js"
